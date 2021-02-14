@@ -1,0 +1,14 @@
+#@data/values
+---
+issuer:
+  name: selfsigned-issuer
+  namespace: system
+
+certificate:
+  name: serving-cert
+  namespace: system
+
+service:
+  name: webhook-service
+  namespace: system
+

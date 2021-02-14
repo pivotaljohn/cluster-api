@@ -1,0 +1,14 @@
+#@data/values
+---
+issuer:
+  name: ""
+  namespace: ""
+
+certificate:
+  name: ""
+  namespace: ""
+
+service:
+  name: ""
+  namespace: ""
+

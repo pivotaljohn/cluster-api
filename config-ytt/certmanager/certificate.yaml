@@ -1,0 +1,25 @@
+#@ load("@ytt:data", "data"); d = data.values
+#! The following manifests contain a self-signed issuer CR and a certificate CR.
+#! More document can be found at https://docs.cert-manager.io
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: #@ d.issuer.name
+  namespace: #@ d.issuer.namespace
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: #@ d.certificate.name
+  namespace: #@ d.certificate.namespace
+spec:
+  dnsNames:
+  - #@ d.service.name + "." + d.service.namespace + ".svc"
+  - #@ d.service.name + "." + d.service.namespace + ".svc.cluster.local"
+  issuerRef:
+    kind: Issuer
+    name: #@ d.issuer.name
+  secretName: #@ d.service.name + "-cert"

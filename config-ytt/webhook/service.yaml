@@ -1,0 +1,11 @@
+#@ load("@ytt:data", "data"); d=data.values
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ d.service.name
+  namespace: #@ d.service.namespace
+spec:
+  ports:
+    - port: 443
+      targetPort: webhook-server

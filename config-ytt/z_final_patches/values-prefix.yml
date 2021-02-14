@@ -1,0 +1,21 @@
+#@ name_prefix = "capi-"
+#@data/values
+---
+issuer:
+  #@overlay/replace via=lambda curr, prefix: prefix + curr
+  name: #@ name_prefix
+  #@overlay/replace via=lambda curr, prefix: prefix + curr
+  namespace: #@ name_prefix
+
+certificate:
+  #@overlay/replace via=lambda curr, prefix: prefix + curr
+  name: #@ name_prefix
+  #@overlay/replace via=lambda curr, prefix: prefix + curr
+  namespace: #@ name_prefix
+
+service:
+  #@overlay/replace via=lambda curr, prefix: prefix + curr
+  name: #@ name_prefix
+  #@overlay/replace via=lambda curr, prefix: prefix + curr
+  namespace: #@ name_prefix
+

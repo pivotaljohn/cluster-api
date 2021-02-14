@@ -1,0 +1,11 @@
+#! Helper function for patches over the controller-manager
+
+#! fully-qualified resource identifier for the controller-manager
+#@ def controller_manager():
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: controller-manager
+  namespace: system
+#@ end
+

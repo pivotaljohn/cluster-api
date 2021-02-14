@@ -1,0 +1,35 @@
+#@ load("@ytt:data", "data"); d=data.values
+#@ load("@ytt:overlay", "overlay")
+#@ load("manager.lib.yml", "controller_manager")
+
+#@overlay/match by=overlay.subset(controller_manager())
+---
+spec:
+  template:
+    spec:
+      containers:
+      #@overlay/match by="name"
+      - name: manager
+        ports:
+        #! TODO: sort array contents during diff so that order doesn't matter
+        #@overlay/match by="name", missing_ok=True
+        #@overlay/remove
+        - name: webhook-server
+        #@overlay/match by=overlay.index(0)
+        #@overlay/insert before=True
+        - containerPort: 9443
+          name: webhook-server
+          protocol: TCP
+        #@overlay/match missing_ok=True
+        volumeMounts:
+        #@overlay/match by="name", missing_ok=True
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+      #@overlay/match missing_ok=True    
+      volumes:
+      #@overlay/match by="name", missing_ok=True
+      - name: cert
+        secret:
+          defaultMode: 420
+          secretName: #@ d.service.name + "-cert"

@@ -1,0 +1,31 @@
+#@ load("@ytt:overlay", "overlay")
+
+#@ def manager_role():
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+#@ end
+
+#@overlay/match by=overlay.subset(manager_role())
+#@overlay/match-child-defaults missing_ok=True
+---
+metadata:
+  labels:
+    cluster.x-k8s.io/aggregate-to-manager: "true"
+
+
+#@ def manager_rolebinding():
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: manager-rolebinding
+#@ end
+
+#@overlay/match by=overlay.subset(manager_rolebinding())
+#@overlay/match-child-defaults missing_ok=True
+---
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: aggregated-manager-role
