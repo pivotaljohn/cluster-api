@@ -7,8 +7,15 @@ issuer:
 certificate:
   name: serving-cert
   namespace: system
+  inject_into:
+    webhooks: true
 
 service:
   name: webhook-service
   namespace: system
+
+manager:
+  image: controller:latest
+  imagePullPolicy: Always
+
 

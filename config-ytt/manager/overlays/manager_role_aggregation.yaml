@@ -23,7 +23,6 @@ metadata:
 #@ end
 
 #@overlay/match by=overlay.subset(manager_rolebinding())
-#@overlay/match-child-defaults missing_ok=True
 ---
 roleRef:
   apiGroup: rbac.authorization.k8s.io

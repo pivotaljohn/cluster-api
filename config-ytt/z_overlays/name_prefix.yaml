@@ -1,44 +1,38 @@
 #@ load("@ytt:overlay", "overlay")
 #@ load("prefix.star", "name_prefix");
 
-#@ def ensure_prefix(curr, prefix):
-#@   return prefix+curr if not curr.startswith(prefix) else curr
+#@ def prefixed(curr, _):
+#@   return name_prefix+curr if not curr.startswith(name_prefix) else curr
 #@ end
 
-
 #@overlay/match by=overlay.not_op(overlay.subset({"kind": "CustomResourceDefinition"})), expects="1+"
+#@overlay/match-child-defaults when=1
 ---
 metadata:
-  #@overlay/replace via=ensure_prefix
-  name: #@ name_prefix
-#@overlay/match when=1
+  #@overlay/replace via=prefixed
+  name:
 roleRef:
-  #@overlay/replace via=ensure_prefix
-  name: #@ name_prefix
-#@overlay/match when=1
+  #@overlay/replace via=prefixed
+  name:
 spec:
-  #@overlay/match when=1
+  #@overlay/match-child-defaults when="0+"
   dnsNames:
-  #@overlay/match by=overlay.all, expects="0+"
-  #@overlay/replace via=ensure_prefix
-  - #@ name_prefix
-  #@overlay/match when=1
+  #@overlay/match by=overlay.all
+  #@overlay/replace via=prefixed
+  -
   template:
-    #@overlay/match when=1
     spec:
-      #@overlay/match when=1
+      #@overlay/match-child-defaults when="0+"
       volumes:
       #@overlay/match by=overlay.all
+      #@overlay/match-child-defaults when=1
       - 
-        #@overlay/match when=1
         secret:
-          #@overlay/replace via=ensure_prefix
-          secretName: #@ name_prefix
-  #@overlay/match when=1
+          #@overlay/replace via=prefixed
+          secretName:
   issuerRef:
-    #@overlay/replace via=ensure_prefix
-    name: #@ name_prefix
-  #@overlay/match when=1
-  #@overlay/replace via=ensure_prefix
-  secretName: #@ name_prefix
+    #@overlay/replace via=prefixed
+    name:
+  #@overlay/replace via=prefixed
+  secretName:
 

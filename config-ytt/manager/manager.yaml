@@ -1,3 +1,4 @@
+#@ load("@ytt:data", "data"); d=data.values
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -23,7 +24,8 @@ spec:
         - "--leader-elect"
         - "--metrics-bind-addr=127.0.0.1:8080"
         - "--feature-gates=MachinePool=${EXP_MACHINE_POOL:=false},ClusterResourceSet=${EXP_CLUSTER_RESOURCE_SET:=false}"
-        image: controller:latest
+        image: #@ d.manager.image
+        imagePullPolicy: #@ d.manager.imagePullPolicy
         name: manager
         ports:
         - containerPort: 9440

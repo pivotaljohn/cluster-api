@@ -11,10 +11,6 @@ spec:
       #@overlay/match by="name"
       - name: manager
         ports:
-        #! TODO: sort array contents during diff so that order doesn't matter
-        #@overlay/match by="name", missing_ok=True
-        #@overlay/remove
-        - name: webhook-server
         #@overlay/match by=overlay.index(0)
         #@overlay/insert before=True
         - containerPort: 9443

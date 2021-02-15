@@ -4,6 +4,9 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: mutating-webhook-configuration
+  #@ if/end d.certificate.inject_into.webhooks:
+  annotations:
+    cert-manager.io/inject-ca-from: #@ d.certificate.namespace + "/" + d.certificate.name
 webhooks:
 - admissionReviewVersions:
   - v1beta1
