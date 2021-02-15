@@ -1,0 +1,44 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("prefix.star", "name_prefix")
+
+#@ NON_NAMESPACED = [
+#@   "ComponentStatus",
+#@   "Namespace",
+#@   "Node",
+#@   "PersistentVolume",
+#@   "MutatingWebhookConfiguration",
+#@   "ValidatingWebhookConfiguration",
+#@   "CustomResourceDefinition",
+#@   "APIService",
+#@   "TokenReview",
+#@   "SelfSubjectAccessReview",
+#@   "SelfSubjectRulesReview",
+#@   "SubjectAccessReview",
+#@   "CertificateSigningRequest",
+#@   "RuntimeClass",
+#@   "PodSecurityPolicy",
+#@   "ClusterRoleBinding",
+#@   "ClusterRole",
+#@   "PriorityClass",
+#@   "CSIDriver",
+#@   "CSINode",
+#@   "StorageClass",
+#@   "VolumeAttachment"
+#@ ]
+
+#@ def namespaceable(idx, left, right):
+#@   return left["kind"] not in NON_NAMESPACED
+#@ end
+
+#@overlay/match by=namespaceable, expects="1+"
+---
+metadata:
+  #@overlay/match missing_ok=True
+  namespace: #@ name_prefix + "system"
+
+#@overlay/match by=overlay.all, expects="1+"
+---
+#@overlay/match when=1
+subjects:
+#@overlay/match by=overlay.subset({"namespace": "system"})
+- namespace: #@ name_prefix + "system"

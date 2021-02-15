@@ -1,4 +1,5 @@
-#@ name_prefix = "capi-"
+#@ load("prefix.star", "name_prefix")
+
 #@data/values
 ---
 issuer:

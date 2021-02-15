@@ -1,0 +1,44 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("prefix.star", "name_prefix");
+
+#@ def ensure_prefix(curr, prefix):
+#@   return prefix+curr if not curr.startswith(prefix) else curr
+#@ end
+
+
+#@overlay/match by=overlay.not_op(overlay.subset({"kind": "CustomResourceDefinition"})), expects="1+"
+---
+metadata:
+  #@overlay/replace via=ensure_prefix
+  name: #@ name_prefix
+#@overlay/match when=1
+roleRef:
+  #@overlay/replace via=ensure_prefix
+  name: #@ name_prefix
+#@overlay/match when=1
+spec:
+  #@overlay/match when=1
+  dnsNames:
+  #@overlay/match by=overlay.all, expects="0+"
+  #@overlay/replace via=ensure_prefix
+  - #@ name_prefix
+  #@overlay/match when=1
+  template:
+    #@overlay/match when=1
+    spec:
+      #@overlay/match when=1
+      volumes:
+      #@overlay/match by=overlay.all
+      - 
+        #@overlay/match when=1
+        secret:
+          #@overlay/replace via=ensure_prefix
+          secretName: #@ name_prefix
+  #@overlay/match when=1
+  issuerRef:
+    #@overlay/replace via=ensure_prefix
+    name: #@ name_prefix
+  #@overlay/match when=1
+  #@overlay/replace via=ensure_prefix
+  secretName: #@ name_prefix
+
